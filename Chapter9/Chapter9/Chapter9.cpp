@@ -50,29 +50,49 @@ public:
 		m_numerator = m_numerator / gcdn;
 		m_denominator = m_denominator / gcdn;
 	}
+
+	friend std::ostream& operator << (std::ostream &out,const Fraction &fraction);
+	
+	friend std::istream& operator >> (std::istream &in, Fraction &fraction);
+
+
 };
 
+std::ostream& operator << (std::ostream &out,const Fraction &fraction)
+{
+	out << fraction.m_numerator << "/" << fraction.m_denominator;
+	return out;
+}
+
+
+std::istream& operator >> (std::istream &in, Fraction &fraction)
+{
+	in >> fraction.m_numerator;
+	char xiegang;
+	in >> xiegang;
+	in >> fraction.m_denominator;
+
+	fraction.reduce();
+
+	return in;
+}
 
 int main()
 {
-	Fraction f1(2, 5);
-	f1.print();
+	Fraction f1;
+	std::cout << "Enter fraction 1: ";
+	std::cin >> f1;
 
-	Fraction f2(3, 8);
-	f2.print();
+	Fraction f2;
+	std::cout << "Enter fraction 2: ";
+	std::cin >> f2;
 
-	Fraction f3 = f1 * f2;
-	f3.print();
+	//Fraction f1(2, 3);
+	//Fraction f2(3, 8);
 
-	Fraction f4 = f1 * 2;
-	f4.print();
+	std::cout << f1 << " * " << f2 << " is " << f1 * f2 << '\n';
 
-	Fraction f5 = 2 * f2;
-	f5.print();
-
-	Fraction f6 = Fraction(1, 2) * Fraction(2, 3) * Fraction(3, 4);
-	f6.print();
-
+	
 
     return 0;
 }

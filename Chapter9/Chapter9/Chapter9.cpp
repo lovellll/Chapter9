@@ -4,52 +4,33 @@
 #include "stdafx.h"
 #include <iostream>
 #include <string>
-#include <vector>
 
-class StudentGrade
+class Mystring
 {
-	std::string m_name;
-	char m_grade;
-	friend class GradeMap;
+	std::string m_string;
 
 public:
-	
-	StudentGrade(std::string name, char grade='C') :m_name(name), m_grade(grade)
-	{
-	}
-};
-
-class GradeMap
-{
-	std::vector<StudentGrade> m_map;
-
-public:
-	GradeMap()
+	Mystring(std::string string) :m_string(string)
 	{
 	}
 
-	char& operator[](const std::string &name)
+	std::string operator()(int index, int length)
 	{
-		for (auto &ref : m_map)
+		std::string tempString;
+		for (int i = index; i < index+length; ++i)
 		{
-			if (ref.m_name == name)
-				return ref.m_grade;
+			tempString += m_string[i];
 		}
-		m_map.push_back(StudentGrade(name));
-		return m_map.back().m_grade;
+		return tempString;
 	}
-
 };
+
+
 
 int main()
 {
-	GradeMap grades;
-	grades["Joe"] = 'A';
-	grades["Frank"] = 'B';
-	std::cout << "Joe has a grade of " << grades["Joe"] << '\n';
-	std::cout << "Frank has a grade of " << grades["Frank"] << '\n';
-
-	
+	Mystring string("Hello, world!");
+	std::cout << string(7, 5); // start at index 7 and return 5 characters
 
     return 0;
 }

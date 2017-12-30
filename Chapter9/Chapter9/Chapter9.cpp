@@ -3,94 +3,51 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
+#include <vector>
 
-
-class Fraction
+class StudentGrade
 {
-private:
-	int m_numerator;
-	int m_denominator;
+	std::string m_name;
+	char m_grade;
+	friend class GradeMap;
 
 public:
-	Fraction(int numerator=0,int denominator=1):m_numerator(numerator),m_denominator(denominator)
-	{
-		reduce();
-	}
-
-	void print()
-	{
-		std::cout << m_numerator << "/" << m_denominator << "\n";
-	}
-
-	friend Fraction operator*(const Fraction &f1, const Fraction &f2)
-	{
-		int numerator, denominator;
-		numerator = f1.m_numerator*f2.m_numerator;
-		denominator = f1.m_denominator*f2.m_denominator;
-		return Fraction(numerator, denominator);
-	}
-
-	friend Fraction operator*(const Fraction &f, int x)
-	{
-		return Fraction(f.m_numerator*x, f.m_denominator);
-	}
-
-	friend Fraction operator*(int x, const Fraction &f)
-	{
-		return f*x;
-	}
-
-	static int gcd(int a, int b) {
-		return (b == 0) ? (a > 0 ? a : -a) : gcd(b, a % b);
-	}
-
-	void reduce()
-	{
-		int gcdn = gcd(m_numerator, m_denominator);
-		m_numerator = m_numerator / gcdn;
-		m_denominator = m_denominator / gcdn;
-	}
-
-	friend std::ostream& operator << (std::ostream &out,const Fraction &fraction);
 	
-	friend std::istream& operator >> (std::istream &in, Fraction &fraction);
+	StudentGrade(std::string name, char grade='C') :m_name(name), m_grade(grade)
+	{
+	}
+};
 
+class GradeMap
+{
+	std::vector<StudentGrade> m_map;
+
+public:
+	GradeMap()
+	{
+	}
+
+	char& operator[](const std::string &name)
+	{
+		for (auto &ref : m_map)
+		{
+			if (ref.m_name == name)
+				return ref.m_grade;
+		}
+		m_map.push_back(StudentGrade(name));
+		return m_map.back().m_grade;
+	}
 
 };
 
-std::ostream& operator << (std::ostream &out,const Fraction &fraction)
-{
-	out << fraction.m_numerator << "/" << fraction.m_denominator;
-	return out;
-}
-
-
-std::istream& operator >> (std::istream &in, Fraction &fraction)
-{
-	in >> fraction.m_numerator;
-	char xiegang;
-	in >> xiegang;
-	in >> fraction.m_denominator;
-
-	fraction.reduce();
-
-	return in;
-}
-
 int main()
 {
-	Fraction f1;
-	std::cout << "Enter fraction 1: ";
-	std::cin >> f1;
-
-	Fraction f2;
-	std::cout << "Enter fraction 2: ";
-	std::cin >> f2;
-
-	//Fraction f1(2, 3);
-	//Fraction f2(3, 8);
-
-	std::cout << f1 << " * " << f2 << " is " << f1 * f2 << '\n';
+	GradeMap grades;
+	grades["Joe"] = 'A';
+	grades["Frank"] = 'B';
+	std::cout << "Joe has a grade of " << grades["Joe"] << '\n';
+	std::cout << "Frank has a grade of " << grades["Frank"] << '\n';
 
 	
 
